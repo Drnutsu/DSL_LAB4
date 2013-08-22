@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 
 using namespace std;
 template <typename T>
@@ -46,12 +46,12 @@ public:
 		cout << endl;
 	}
 
-	void insert(int index,T value){ //index value ��� �Ţ�����ǹ�礡����Ѻ�֧���ŧ�� �������
+	void insert(int index,T value){ //index value คือ เลขที่ใช้วนเช็คการสลับดึงพ่อลงมา เรื่อยๆ
 		if(index == 0){
 			h[index] = value;
 			last_index++;
 		}else{
-			if(value < h[(index-1)/2] ){ //�礷�� root
+			if(value < h[(index-1)/2] ){ //เช็คที่ root
 				h[index] = h[(index-1)/2];
 				insert((index-1)/2,value);
 			}else{
@@ -91,12 +91,12 @@ public:
 	void deletemin(T& min){
 		int root = 0;
 		int temp = h[root];
-		while(root*2+2 <= last_index){ //����Ҩ�ŧ��֡�����
-           if(h[root*2+1] < h[root*2+2]){ // ����ҽ�觫������͢�ҽ���˹���¡��ҡѹ  
+		while(root*2+2 <= last_index){ //เช็คว่าจะลงไปลึกเท่าไร
+           if(h[root*2+1] < h[root*2+2]){ // เช็คว่าฝั่งซ้ายหรือขวาฝั่งไหนน้อยกว่ากัน  
 			   if(h[last_index] > h[root*2+1]){
 				   h[root] = h[root*2+1];
 			   }else{
-				   h[root] = h[last_index]; //Bug �Դ˹���
+				   h[root] = h[last_index]; //Bug นิดหน่อย
 			   }
 			   root = root*2+1;
 		   }else{
@@ -120,7 +120,7 @@ void insert(T *arr,int size,T value){
 	if(size == 0){
 		arr[size] = value;
 	}
-	if(value < arr[(size-1)/2] ){ //�礷�� root
+	if(value < arr[(size-1)/2] ){ //เช็คที่ root
 		arr[size] = arr[(size-1)/2];
 		insert(arr,(size-1)/2,value);
 	}else{
