@@ -1,4 +1,4 @@
-๏ปฟ#include <iostream>
+#include <iostream>
 
 using namespace std;
 
@@ -10,7 +10,7 @@ class BSTnode{
 	T data;
 	BSTnode *left, *right;
 public:
-	friend class BST<T>; // เธ—เธณเนเธซเน class BST เน€เธฃเธตเธขเธ member variable เธเธญเธ BSTNode เนเธ”เน
+	friend class BST<T>; // ทำให้ class BST เรียก member variable ของ BSTNode ได้
 	BSTnode(const T& d,BSTnode *l = nullptr,BSTnode *r = nullptr ){ 
 		// constructor
 		data = d;
@@ -26,21 +26,21 @@ class BST{
 	BSTnode<T> *root;
 	//addNode internal system
 	void addNode(const T& item,BSTnode<T>*& r){
-		if(r != nullptr){ //เธ•เธฃเธงเธเธชเธญเธเธงเนเธฒเธ—เธตเน r เธกเธตเธเนเธญเธกเธนเธฅเธญเธขเธนเนเนเธฅเนเธงเธซเธฃเธทเธญเนเธกเนเธ–เนเธฒเธขเธฑเธเธกเธตเธญเธขเธนเนเธเนเน€เธเนเธฒ recursiveเนเธเน€เธฃเธทเนเธญเธขเน
+		if(r != nullptr){ //ตรวจสอบว่าที่ r มีข้อมูลอยู่แล้วหรือไม่ถ้ายังมีอยู่ก็เข้า recursiveไปเรื่อยๆ
 			if(item < r->data){
 				addNode(item,r->left);
 			}else{
 				addNode(item,r->right);
 			}
 		}else{
-			r = new BSTnode<T>(item); // เนเธกเนเธกเธตเธเนเธญเธกเธนเธฅเธ—เธตเน node เธเธฑเนเธเนเนเธฅเนเธงเนเธชเนเธเนเธญเธกเธนเธฅเธฅเธเนเธเนเธ”เนเน€เธฅเธข
+			r = new BSTnode<T>(item); // ไม่มีข้อมูลที่ node นั้นๆแล้วใส่ข้อมูลลงไปได้เลย
 		}
 	}
 
 	void print(BSTnode<T> *r,int level){
 		if(r != nullptr){
 			print(r->right,level+1);
-			for(int i =0;i < level;i++)cout << " "; // print เธเนเธญเธเธงเนเธฒเธ
+			for(int i =0;i < level;i++)cout << " "; // print ช่องว่าง
 			cout << r->data << endl;
 			print(r->left,level+1);
 		}
@@ -48,7 +48,7 @@ class BST{
 
 	//find 
 	BSTnode<T>*& find(BSTnode<T> *r,T item){
-		while(r != nullptr || r->left != nullptr && r->right != nullptr){ // เธ•เธฃเธงเธเธชเธญเธเธเธฒเธฃเธชเธดเนเธเธชเธธเธ”เธเธญเธเธเธฒเธฃเธงเธเธซเธฒ
+		while(r != nullptr || r->left != nullptr && r->right != nullptr){ // ตรวจสอบการสิ้นสุดของการวนหา
 			if(item == r->data)return r;
 			if(item < r->data){
 				if(item == r->left->data)return r->left;
@@ -58,25 +58,25 @@ class BST{
 				r = r->right;
 			}
 		}
-		BSTnode<T> *n = nullptr; //เธชเธฃเนเธฒเธ nullptr เน€เธเธทเนเธญเธชเนเธ pointer เธ—เธตเน null เธเธฅเธฑเธเนเธ
+		BSTnode<T> *n = nullptr; //สร้าง nullptr เพื่อส่ง pointer ที่ null กลับไป
 		return n;
 	}
 
 	//remove 
 	void removeNode(BSTnode<T>*& r){
 		if(r->left != nullptr && r->right != nullptr){
-			BSTnode<T> *p = r; //pointer เธเธฃเธฐเธ—เธณเธเธฒเธฃ
-			BSTnode<T> *bp; //pointer เน€เธเนเธเธเนเธฒเธเนเธญเธเธเธฃเธฐเธ—เธณเธเธฒเธฃ
-			p = p->right; //เน€เธฅเธทเนเธญเธเนเธเธ—เธฒเธเธเธงเธฒเธ—เธตเธเธถเธ >> เธซเธฒเธเนเธฒเธเธ—เธตเนเธกเธฒเธ เน€เธเธฃเธฒเธฐเธ•เนเธญเธเธเธฒเธฃเธเนเธฒเธ—เธตเนเธกเธฒเธเธเธงเนเธฒเธเนเธฒเธเธเนเธฒเธขเธ—เธตเนเธเธฐเนเธ”เธเธฅเธ เนเธ•เนเธเนเธญเธขเธ—เธตเนเธชเธธเธ”เนเธเธเธฑเนเธเธเธงเธฒเธเธญเธเธ—เธตเนเธเธฐเนเธ”เธเธฅเธ
-			while(p->left != nullptr){ // เนเธเธ—เธฒเธเธเนเธฒเธขเนเธเน€เธฃเธทเนเธญเธขเน เธเธเนเธกเนเธกเธตเธ•เธฑเธงเนเธ”เนเธฅเนเธง >> เธซเธฒเธ•เธฑเธงเธ—เธตเนเธเนเธญเธขเธ—เธตเนเธชเธธเธ”เนเธเธเนเธฒเธเธเธงเธฒเธเธญเธเธ•เธฑเธงเธ—เธตเนเธ–เธนเธเธฅเธ
+			BSTnode<T> *p = r; //pointer กระทำการ
+			BSTnode<T> *bp; //pointer เก็บค่าก่อนกระทำการ
+			p = p->right; //เลื่อนไปทางขวาทีนึง >> หาข้างที่มาก เพราะต้องการค่าที่มากกว่าข้างซ้ายที่จะโดนลบ แต่น้อยที่สุดในฝั่งขวาของที่จะโดนลบ
+			while(p->left != nullptr){ // ไปทางซ้ายไปเรื่อยๆ จนไม่มีตัวใดแล้ว >> หาตัวที่น้อยที่สุดในข้างขวาของตัวที่ถูกลบ
 				bp = p; 
 				p = p->left;
 			}
-			bp->left = p->right; // เธ•เธฑเธ”เธ•เธฑเธงเธ—เธตเนเธเนเธญเธขเธ—เธตเนเธชเธธเธ”เนเธเธเธฑเนเธเธเธงเธฒเธเธญเธเธ•เธฑเธงเธ—เธตเนเนเธ”เธเธฅเธเธญเธญเธ
-			r->data = p->data; // เน€เธญเธฒเธเนเธฒเธ—เธตเนเธเนเธญเธขเธ—เธตเนเธชเธธเธ”เนเธเธเธฑเนเธเธเธงเธฒเธเธญเธเธ•เธฑเธงเธ—เธตเนเธ–เธนเธเธฅเธเนเธเนเธ—เธเธ—เธตเนเธเธฃเธดเน€เธงเธ“เธ—เธตเนเธฅเธ
+			bp->left = p->right; // ตัดตัวที่น้อยที่สุดในฝั่งขวาของตัวที่โดนลบออก
+			r->data = p->data; // เอาค่าที่น้อยที่สุดในฝั่งขวาของตัวที่ถูกลบไปแทนที่บริเวณที่ลบ
 		}else if(r->left != nullptr || r->right != nullptr){
 			BSTnode<T> *p = root;
-			while(true){ // เนเธฅเนเธ•เธฑเนเธเนเธ•เนเธ•เธฑเธงเนเธฃเธเธกเธฒเธซเธฒเธ•เธฑเธงเธเนเธญเธเธ—เธตเนเธเธฐเธฅเธ
+			while(true){ // ไล่ตั้งแต่ตัวแรกมาหาตัวก่อนที่จะลบ
 				if(r->data > p->data){
 					if(p->right == r)break;
 					p = p->right;
@@ -95,13 +95,39 @@ class BST{
 				}else p->left = r->right;
 			}
 		}else{
-			r = nullptr; //เธ–เนเธฒเนเธกเนเธกเธต node เธฅเธนเธเธเนเธฅเธเธญเธญเธเธ”เธทเนเธญเนเนเธ”เนเน€เธฅเธข
+			r = nullptr; //ถ้าไม่มี node ลูกก็ลบออกดื้อๆได้เลย
 		}
-		
-	}
-	
-	
 
+	}
+
+	//Count more
+	int countMore(const T& item,BSTnode<T>*& r){
+		//iterative solution
+		/*int count = 0;
+		BSTnode<T> *p = r;
+		if(p->right != nullptr){ //ถ้าไม่มีโหนดข้างขวาแสดงว่าไม่มี ตัวที่มากกว่ามันแน่ๆ
+			p = p->right; // โหนดข้างขวาของ r ต้องมากกว่า r อยู่แล้ว
+			count++;
+			while(p->left != nullptr){
+				if( p->left->data > r->data){
+					count++;
+					if(p->right != nullptr)count++; // ถ้ามีฝั่งขวาของตัวที่ตรวจด้วยก็เอามานับด้วย เพราะฝั่งขวาจะมากกว่าฝั่งซ้ายเสมอ หากซ้ายมากกว่าแล้ว ขวาก็ต้องมากว่าเสมอ
+					p = p->left;
+					if(p->right->data > r->data){
+						count++;
+						p = p->right;
+					}
+				}
+			}
+		}
+		return count;*/
+		if(r != nullptr){
+			if(r->data > item)return 1 + countMore(item,r->left) + countMore(item,r->right); //นับโดยเข้าไปทั้งซ้าย และ ขวา ของ node
+			else return 0;
+		}else{
+			return 0;
+		}
+	}
 
 public:
 	//constructor
@@ -127,7 +153,7 @@ public:
 	}
 
 	//removeTree
-	void removeTree(BSTnode<T> *r){
+	void removeTree(BSTnode<T> *r){ //ยังมีบัค คือลบ root ไม่ได้ ลบทั้ง tree ทั้งหมดเลยไม่ได้
 		if(r != nullptr){
 			removeTree(r->left);
 			removeTree(r->right);
@@ -135,6 +161,11 @@ public:
 			print();
 			cout << "------------------------" <<endl;
 		}
+	}
+
+	//count More
+	int countMore(const T& item){
+		return countMore(item,find(item)->right); //เลื่อไปทางขวด 1 node เพราะต้องเริ่มนับที่ node ต่อมาทางขวาซึ่งจะมากกว่า node ที่ item แน่ๆ
 	}
 
 };
@@ -153,10 +184,13 @@ int main() {
 	if(ans == nullptr){
 		cout << "null";
 	}
-	cout << "----------------------------------------" << endl;
+	/*cout << "----------------------------------------" << endl;
 	t.removeNode(9);
 	t.print();
 	cout << "----------------------------------------" << endl;
 	t.removeTree(t.find(17));
+	t.print();*/
+	cout << "----------------------------------------" << endl;
 	t.print();
+	cout << "count = " << t.countMore(3) << endl;
 }
