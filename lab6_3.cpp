@@ -106,19 +106,19 @@ class BST{
 		/*int count = 0;
 		BSTnode<T> *p = r;
 		if(p->right != nullptr){ //ถ้าไม่มีโหนดข้างขวาแสดงว่าไม่มี ตัวที่มากกว่ามันแน่ๆ
-			p = p->right; // โหนดข้างขวาของ r ต้องมากกว่า r อยู่แล้ว
-			count++;
-			while(p->left != nullptr){
-				if( p->left->data > r->data){
-					count++;
-					if(p->right != nullptr)count++; // ถ้ามีฝั่งขวาของตัวที่ตรวจด้วยก็เอามานับด้วย เพราะฝั่งขวาจะมากกว่าฝั่งซ้ายเสมอ หากซ้ายมากกว่าแล้ว ขวาก็ต้องมากว่าเสมอ
-					p = p->left;
-					if(p->right->data > r->data){
-						count++;
-						p = p->right;
-					}
-				}
-			}
+		p = p->right; // โหนดข้างขวาของ r ต้องมากกว่า r อยู่แล้ว
+		count++;
+		while(p->left != nullptr){
+		if( p->left->data > r->data){
+		count++;
+		if(p->right != nullptr)count++; // ถ้ามีฝั่งขวาของตัวที่ตรวจด้วยก็เอามานับด้วย เพราะฝั่งขวาจะมากกว่าฝั่งซ้ายเสมอ หากซ้ายมากกว่าแล้ว ขวาก็ต้องมากว่าเสมอ
+		p = p->left;
+		if(p->right->data > r->data){
+		count++;
+		p = p->right;
+		}
+		}
+		}
 		}
 		return count;*/
 		if(r != nullptr){
@@ -129,6 +129,46 @@ class BST{
 		}
 	}
 
+	//height
+
+	int height(BSTnode<T>* r){
+		if(r != nullptr){
+			int ans = (height(r->left) < height(r->right) )?height(r->right):height(r->left);
+			return 1 + ans;
+		}else return 0;
+	}
+
+	//path
+	void path(BSTnode<T>* r,T item,BST<T>& temp){
+		if(r != nullptr){
+			temp.addNode(r->data); //ใส่โหนดไปใน temp
+			if(item >= r->data)path(r->right,item,temp); //วิ่งค้นหาเส้นทางไปตามหลักการ binary น้อยซ้ายมากขวา
+			else path(r->left,item,temp);
+		}
+
+	}
+
+	//smallest
+	T smallest(BSTnode<T> *r){
+		if(r->left != nullptr){
+			return smallest(r->left);
+		}else return r->data;
+	}
+
+	//largest
+	T largest(BSTnode<T> *r){
+		if(r->right != nullptr){
+			return largest(r->right);
+		}else return r->data;
+	}
+
+	// balanced
+	bool balanced(BSTnode<T> *r){
+			int left = height(r->left);
+			int right = height(r->right);
+			if(left == right)return true;
+			else return false;
+	}
 public:
 	//constructor
 	BST(){
@@ -153,7 +193,7 @@ public:
 	}
 
 	//removeTree
-	void removeTree(BSTnode<T> *r){ //ยังมีบัค คือลบ root ไม่ได้ ลบทั้ง tree ทั้งหมดเลยไม่ได้
+	void removeTree(BSTnode<T>* r){ //ยังมีบัค คือลบ root ไม่ได้ ลบทั้ง tree ทั้งหมดเลยไม่ได้
 		if(r != nullptr){
 			removeTree(r->left);
 			removeTree(r->right);
@@ -168,6 +208,32 @@ public:
 		return countMore(item,find(item)->right); //เลื่อไปทางขวด 1 node เพราะต้องเริ่มนับที่ node ต่อมาทางขวาซึ่งจะมากกว่า node ที่ item แน่ๆ
 	}
 
+	//height
+	int height(const T& item){
+		return height(find(item))-1; //ลบออกหนึง่เพราะ height = จำนวนnode - 1
+	} 
+
+	//path
+	void path(const T& item){
+		BST<T> temp; //สร้าง BST ใหม่ไว้เก็บข้อมูลเพื่อรอปริ้น
+		path(root,item,temp);
+		temp.print();
+	}
+
+	//smallest
+	T smallest(){
+		return smallest(root);
+	}
+
+	//largest
+	T largest(){
+		return largest(root);
+	}
+
+	//balanced
+	bool balanced(){
+		return balanced(root);
+	}
 };
 
 int main() {
@@ -188,9 +254,29 @@ int main() {
 	t.removeNode(9);
 	t.print();
 	cout << "----------------------------------------" << endl;
-	t.removeTree(t.find(17));
-	t.print();*/
+	*/
+	t.removeTree(t.find(16));
+	t.print();
 	cout << "----------------------------------------" << endl;
 	t.print();
 	cout << "count = " << t.countMore(3) << endl;
+	cout << "----------------------------------------" << endl;
+	t.print();
+	cout << "height = " << t.height(3) << endl;
+	cout << "----------------------------------------" << endl;
+	cout << "path is " << endl;
+	t.path(16);
+	cout << "----------------------------------------" << endl;
+	cout << "smallest" << endl;
+	cout << "smallest value = " << t.smallest() <<endl;
+	cout << "----------------------------------------" << endl;
+	cout << "largest" << endl;
+	cout << "largest value = " << t.largest() <<endl;
+	cout << "----------------------------------------" << endl;
+	cout << "Balanced" << endl;
+	t.print();
+    cout << "this tree is :  ";
+	if(t.balanced())cout << "balanced"<<endl;
+	else cout << "not balanced" <<endl;
+
 }
